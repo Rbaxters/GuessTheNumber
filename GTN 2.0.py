@@ -30,20 +30,20 @@ def titleScreen():
         try:
             titleInput = input("Enter your choice: ")
             if titleInput == "1":
-                break
+                break  # Exit the loop to start the game
             elif titleInput == "2":
                 print("Welcome to Number Guesser 2.0! The rules are simple. You have to guess the number between 1 and 100. The lower the score, the better you are! Good luck!")
-                continue
+                continue  # Display the tutorial and continue the loop
             elif titleInput == "3":
                 if not os.path.exists("leaderboard.txt"):
                     print("No scores yet!")
-                    continue
+                    continue  # If leaderboard file doesn't exist, continue the loop
                 with open("leaderboard.txt", "r") as f:
                     print(f"\nLeaderboard:\n\n{f.read()}")
-                continue
+                continue  # Display the leaderboard and continue the loop
             elif titleInput == "4":
                 print("Thanks for playing!")
-                exit()
+                exit()  # Exit the program
             else:
                 print("Invalid input. Please enter a number between 1 and 4.")
         except ValueError:
@@ -53,11 +53,11 @@ def titleScreen():
 def game(): 
     print("Please input a username.")
     nameInput = input()
-    user = User(nameInput, 0)
+    user = User(nameInput, 0)  # Create a new user with the provided username
 
     while True: 
-        guessCounter = 0
-        randomNumber = random.randint(1, 100)
+        guessCounter = 0  # Initialize guess counter
+        randomNumber = random.randint(1, 100)  # Generate a random number between 1 and 100
 
         while True:
             userGuess = input("Enter your guess: ")
@@ -66,12 +66,12 @@ def game():
                 userGuess = int(userGuess)
                 if userGuess < 1 or userGuess > 100:
                     print("Guess must be between 1 and 100.")
-                    continue
+                    continue  # If guess is out of range, continue the loop
             except ValueError:
                 print("Guess must be a number between 1 and 100.")
-                continue
+                continue  # If input is not a valid number, continue the loop
 
-            guessCounter += 1
+            guessCounter += 1  # Increment guess counter
 
             if userGuess > randomNumber:
                 print("Guess is too high!")
@@ -81,32 +81,33 @@ def game():
                 print("That's correct!")
                 print(f"You guessed the number in {guessCounter} tries.")
 
-                finalScore = guessCounter * 100
-                user.assignScore(finalScore) 
+                finalScore = guessCounter * 100  # Calculate the final score
+                user.assignScore(finalScore)  # Assign the score to the user
 
+                # Append the user's score to the leaderboard file
                 with open("leaderboard.txt", "a") as f:  
                     f.write(user.displayProperties())  
 
                 print(f"Your score is {finalScore} and has been saved to 'leaderboard.txt'.")
 
-                sortScores()
-                break
+                sortScores()  # Sort the scores in the leaderboard
+                break  # Exit the inner loop to ask if the user wants to play again
 
         while True:
             gameInput = input("Would you like to play again? (Y/N): ").strip().capitalize()
             if gameInput == "Y":
-                 break  
+                break  # Break the loop to start a new game
             elif gameInput == "N":
                 print("Thanks for playing!")
-                return 
+                return  # Exit the game function
             else:
                 print("Invalid Input. (Y/N) only.")
-                continue
+                continue  # If input is invalid, continue the loop
 
 # Function to sort scores in the leaderboard
 def sortScores():
     if not os.path.exists("leaderboard.txt"):  
-        open("leaderboard.txt", "w").close() 
+        open("leaderboard.txt", "w").close()  # Create the leaderboard file if it doesn't exist
         return  
 
     with open("leaderboard.txt", "r") as f: 
@@ -120,14 +121,15 @@ def sortScores():
             userscore = parts[1].split(": ")[1] 
 
             if userscore.isdigit():  
-                users.append((name, int(userscore))) 
+                users.append((name, int(userscore)))  # Add valid user scores to the list
 
-    users.sort(key=lambda x: x[1])  
+    users.sort(key=lambda x: x[1])  # Sort users by score in ascending order
     with open("leaderboard.txt", "w") as f:
         for user in users:
             f.write(f"Name: {user[0]}, Score: {user[1]}\n")
-        f.write("\nThe lower the score, the better you are!\n")
+        f.write("\nThe lower the score, the better you are!\n")  # Add a note at the end of the file
 
 # Display the title screen and start the game
 titleScreen()
 game()
+
