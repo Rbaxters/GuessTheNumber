@@ -1,28 +1,59 @@
 import random
 import os
 
+# User class to store user information
 class User:
     def __init__(self, name, score):
         self.name = name
         self.score = score
 
+    # Method to assign a score to the user
     def assignScore(self, score):
         self.score = score
 
+    # Method to display user properties
     def displayProperties(self):
         return f"Name: {self.name}, Score: {self.score}\n"
 
+# Function to display the title screen and handle user input
 def titleScreen():
     print("---------------------------")
     print("|    NUMBER GUESSER 2.0   |")
     print("---------------------------")
-   
-def game(): 
+    print("|     Press 1 to Play     |")
+    print("|   Press 2 for Tutorial  |")
+    print("| Press 3 for Leaderboard |")
+    print("|     Press 4 to Exit     |")
+    print("---------------------------")
 
+    while True:
+        try:
+            titleInput = input("Enter your choice: ")
+            if titleInput == "1":
+                break
+            elif titleInput == "2":
+                print("Welcome to Number Guesser 2.0! The rules are simple. You have to guess the number between 1 and 100. The lower the score, the better you are! Good luck!")
+                continue
+            elif titleInput == "3":
+                if not os.path.exists("leaderboard.txt"):
+                    print("No scores yet!")
+                    continue
+                with open("leaderboard.txt", "r") as f:
+                    print(f"\nLeaderboard:\n\n{f.read()}")
+                continue
+            elif titleInput == "4":
+                print("Thanks for playing!")
+                exit()
+            else:
+                print("Invalid input. Please enter a number between 1 and 4.")
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
+
+# Function to handle the game logic
+def game(): 
     print("Please input a username.")
     nameInput = input()
     user = User(nameInput, 0)
-    
 
     while True: 
         guessCounter = 0
@@ -72,6 +103,7 @@ def game():
                 print("Invalid Input. (Y/N) only.")
                 continue
 
+# Function to sort scores in the leaderboard
 def sortScores():
     if not os.path.exists("leaderboard.txt"):  
         open("leaderboard.txt", "w").close() 
@@ -96,5 +128,6 @@ def sortScores():
             f.write(f"Name: {user[0]}, Score: {user[1]}\n")
         f.write("\nThe lower the score, the better you are!\n")
 
+# Display the title screen and start the game
 titleScreen()
 game()
